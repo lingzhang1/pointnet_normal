@@ -10,7 +10,7 @@ import tf_util
 from transform_nets import input_transform_net, feature_transform_net
 
 def placeholder_inputs(batch_size, num_point):
-    pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, 3))
+    pointclouds_pl = tf.placeholder(tf.float32, shape=(batch_size, num_point, 6))
     labels_pl = tf.placeholder(tf.int32, shape=(batch_size))
     return pointclouds_pl, labels_pl
 
@@ -22,14 +22,18 @@ def get_model(point_cloud, is_training, bn_decay=None):
     end_points = {}
 
     with tf.variable_scope('transform_net1') as sc:
-        transform = input_transform_net(point_cloud, is_training, bn_decay, K=3)
+        transform = input_transform_net(point_cloud, is_training, bn_decay, K=6)
+
     point_cloud_transformed = tf.matmul(point_cloud, transform)
+
     input_image = tf.expand_dims(point_cloud_transformed, -1)
 
-    net = tf_util.conv2d(input_image, 64, [1,3],
+
+    net = tf_util.conv2d(input_image, 64, [1,6],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv1', bn_decay=bn_decay)
+
     net = tf_util.conv2d(net, 64, [1,1],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
@@ -38,6 +42,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     with tf.variable_scope('transform_net2') as sc:
         transform = feature_transform_net(net, is_training, bn_decay, K=64)
     end_points['transform'] = transform
+
     net_transformed = tf.matmul(tf.squeeze(net, axis=[2]), transform)
     net_transformed = tf.expand_dims(net_transformed, [2])
 
@@ -84,7 +89,7 @@ def get_loss(pred, label, end_points, reg_weight=0.001):
     K = transform.get_shape()[1].value
     mat_diff = tf.matmul(transform, tf.transpose(transform, perm=[0,2,1]))
     mat_diff -= tf.constant(np.eye(K), dtype=tf.float32)
-    mat_diff_loss = tf.nn.l2_loss(mat_diff) 
+    mat_diff_loss = tf.nn.l2_loss(mat_diff)
     tf.summary.scalar('mat loss', mat_diff_loss)
 
     return classify_loss + mat_diff_loss * reg_weight

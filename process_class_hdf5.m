@@ -48,20 +48,20 @@ for n=1:length(data_files)
         normals = pcnormals(ptCloud);
 
 %%%%%%%%%%%%%%%%  show normals  %%%%%%%%%%%%%%%
-        figure;
-        pcshow(ptCloud);
-        title('Estimated Normals of Point Cloud');
-        hold on;
-    
-        x = ptCloud.Location(1:1:end,1);
-        y = ptCloud.Location(1:1:end,2);
-        z = ptCloud.Location(1:1:end,3);
-        u = normals(1:1:end,1);
-        v = normals(1:1:end,2);
-        w = normals(1:1:end,3);
-    
-        quiver3(x,y,z,u,v,w);
-        hold off
+%         figure;
+%         pcshow(ptCloud);
+%         title('Estimated Normals of Point Cloud');
+%         hold on;
+%     
+%         x = ptCloud.Location(1:1:end,1);
+%         y = ptCloud.Location(1:1:end,2);
+%         z = ptCloud.Location(1:1:end,3);
+%         u = normals(1:1:end,1);
+%         v = normals(1:1:end,2);
+%         w = normals(1:1:end,3);
+%     
+%         quiver3(x,y,z,u,v,w);
+%         hold off
    
 %%%%%%%%%%%%%%%%  out put normals and coords  %%%%%%%%%%%%%%%
         coords_normal = cat(2, xyzPoints, normals);
