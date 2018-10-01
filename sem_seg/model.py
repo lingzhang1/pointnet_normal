@@ -11,7 +11,7 @@ import tf_util
 
 def placeholder_inputs(batch_size, num_point):
     pointclouds_pl = tf.placeholder(tf.float32,
-                                     shape=(batch_size, num_point, 9))
+                                     shape=(batch_size, num_point, 12))
     labels_pl = tf.placeholder(tf.int32,
                                 shape=(batch_size, num_point))
     return pointclouds_pl, labels_pl
@@ -23,7 +23,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
 
     input_image = tf.expand_dims(point_cloud, -1)
     # CONV
-    net = tf_util.conv2d(input_image, 64, [1,9], padding='VALID', stride=[1,1],
+    net = tf_util.conv2d(input_image, 64, [1,12], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv1', bn_decay=bn_decay)
     net = tf_util.conv2d(net, 64, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv2', bn_decay=bn_decay)
@@ -40,12 +40,12 @@ def get_model(point_cloud, is_training, bn_decay=None):
     pc_feat1 = tf_util.fully_connected(pc_feat1, 256, bn=True, is_training=is_training, scope='fc1', bn_decay=bn_decay)
     pc_feat1 = tf_util.fully_connected(pc_feat1, 128, bn=True, is_training=is_training, scope='fc2', bn_decay=bn_decay)
     print(pc_feat1)
-   
-    # CONCAT 
+
+    # CONCAT
     pc_feat1_expand = tf.tile(tf.reshape(pc_feat1, [batch_size, 1, 1, -1]), [1, num_point, 1, 1])
     points_feat1_concat = tf.concat(axis=3, values=[points_feat1, pc_feat1_expand])
-    
-    # CONV 
+
+    # CONV
     net = tf_util.conv2d(points_feat1_concat, 512, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv6')
     net = tf_util.conv2d(net, 256, [1,1], padding='VALID', stride=[1,1],
@@ -65,7 +65,7 @@ def get_loss(pred, label):
 
 if __name__ == "__main__":
     with tf.Graph().as_default():
-        a = tf.placeholder(tf.float32, shape=(32,4096,9))
+        a = tf.placeholder(tf.float32, shape=(32,4096,12))
         net = get_model(a, tf.constant(True))
         with tf.Session() as sess:
             init = tf.global_variables_initializer()
@@ -73,5 +73,5 @@ if __name__ == "__main__":
             start = time.time()
             for i in range(100):
                 print(i)
-                sess.run(net, feed_dict={a:np.random.rand(32,4096,9)})
+                sess.run(net, feed_dict={a:np.random.rand(32,4096,12)})
             print(time.time() - start)

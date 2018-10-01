@@ -23,8 +23,8 @@ for n=1:length(data_files)
     for i = 1:z
         xyzPoints = data(1:3,:,i);
         xyzPoints = xyzPoints';
-        left = data(4:9,:,i);
-        left = left';
+        all_dim = data(:,:,i);
+        all_dim = all_dim';
 
 %%%%%%%%%%%%%%%%  reduction based on label  %%%%%%%%%%%%%%%  
 
@@ -63,8 +63,7 @@ for n=1:length(data_files)
 %         hold off
    
 %%%%%%%%%%%%%%%%  out put normals and coords  %%%%%%%%%%%%%%%
-        coords_normal = cat(2, xyzPoints, normals);
-        coords_normal = cat(2, coords_normal, left);
+        coords_normal = cat(2, all_dim, normals);
         coords_normal = coords_normal';
         result(:,:,i) = coords_normal;
     end
