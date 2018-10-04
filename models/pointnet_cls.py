@@ -17,6 +17,7 @@ def placeholder_inputs(batch_size, num_point):
 
 def get_model(point_cloud, is_training, bn_decay=None):
     """ Classification PointNet, input is BxNx3, output Bx40 """
+    print("point_cloud[0] ===== ", point_cloud[0])
     batch_size = point_cloud.get_shape()[0].value
     num_point = point_cloud.get_shape()[1].value
     end_points = {}
@@ -27,7 +28,6 @@ def get_model(point_cloud, is_training, bn_decay=None):
     point_cloud_transformed = tf.matmul(point_cloud, transform)
 
     input_image = tf.expand_dims(point_cloud_transformed, -1)
-
 
     net = tf_util.conv2d(input_image, 64, [1,6],
                          padding='VALID', stride=[1,1],
