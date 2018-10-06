@@ -79,7 +79,7 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
     """ ConvNet baseline, input is BxNx3 gray image """
     end_points = {}
 
-    with tf.variable_scope('transform_net1') as sc:
+    # with tf.variable_scope('transform_net1') as sc:
         # K = 6
     #     transform = get_transform(point_cloud, is_training, bn_decay, K)
     # point_cloud_transformed = tf.matmul(point_cloud, transform)
@@ -93,7 +93,7 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
                          bn=True, is_training=is_training, scope='conv3', bn_decay=bn_decay)
 
 
-    with tf.variable_scope('transform_net2') as sc:
+    # with tf.variable_scope('transform_net2') as sc:
     #     K = 128
     #     transform = get_transform_K(out3, is_training, bn_decay, K)
     #
