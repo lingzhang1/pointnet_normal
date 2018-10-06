@@ -99,11 +99,11 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
     #
     # end_points['transform'] = transform
 
-    squeezed_out3 = tf.reshape(out3, [batch_size, num_point, 128])
+    # squeezed_out3 = tf.reshape(out3, [batch_size, num_point, 128])
     # net_transformed = tf.matmul(squeezed_out3, transform)
     # net_transformed = tf.expand_dims(net_transformed, [2])
 
-    out4 = tf_util.conv2d(squeezed_out3, 512, [1,1], padding='VALID', stride=[1,1],
+    out4 = tf_util.conv2d(out3, 512, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv4', bn_decay=bn_decay)
     out5 = tf_util.conv2d(out4, 2048, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv5', bn_decay=bn_decay)
