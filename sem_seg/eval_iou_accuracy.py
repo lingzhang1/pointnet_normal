@@ -1,6 +1,6 @@
 import numpy as np
 
-pred_data_label_filenames = [line.rstrip() for line in open('all_pred_data_label_filelist.txt')]
+pred_data_label_filenames = [line.rstrip() for line in open('meta/all_data_label.txt')]
 gt_label_filenames = [f.rstrip('_pred\.txt') + '_gt.txt' for f in pred_data_label_filenames]
 num_room = len(gt_label_filenames)
 
@@ -32,7 +32,7 @@ print('Overall accuracy: {0}'.format(sum(true_positive_classes)/float(sum(positi
 print 'IoU:'
 iou_list = []
 for i in range(13):
-    iou = true_positive_classes[i]/float(gt_classes[i]+positive_classes[i]-true_positive_classes[i]) 
+    iou = true_positive_classes[i]/float(gt_classes[i]+positive_classes[i]-true_positive_classes[i])
     print(iou)
     iou_list.append(iou)
 
