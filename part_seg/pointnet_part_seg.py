@@ -80,12 +80,12 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
     end_points = {}
 
     with tf.variable_scope('transform_net1') as sc:
-        K = 6
-        transform = get_transform(point_cloud, is_training, bn_decay, K)
-    point_cloud_transformed = tf.matmul(point_cloud, transform)
+        # K = 6
+    #     transform = get_transform(point_cloud, is_training, bn_decay, K)
+    # point_cloud_transformed = tf.matmul(point_cloud, transform)
 
-    input_image = tf.expand_dims(point_cloud_transformed, -1)
-    out1 = tf_util.conv2d(input_image, 64, [1,K], padding='VALID', stride=[1,1],
+    input_image = tf.expand_dims(point_cloud, -1)
+    out1 = tf_util.conv2d(input_image, 64, [1,6], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv1', bn_decay=bn_decay)
     out2 = tf_util.conv2d(out1, 128, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv2', bn_decay=bn_decay)
@@ -94,16 +94,16 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
 
 
     with tf.variable_scope('transform_net2') as sc:
-        K = 128
-        transform = get_transform_K(out3, is_training, bn_decay, K)
-
-    end_points['transform'] = transform
+    #     K = 128
+    #     transform = get_transform_K(out3, is_training, bn_decay, K)
+    #
+    # end_points['transform'] = transform
 
     squeezed_out3 = tf.reshape(out3, [batch_size, num_point, 128])
-    net_transformed = tf.matmul(squeezed_out3, transform)
-    net_transformed = tf.expand_dims(net_transformed, [2])
+    # net_transformed = tf.matmul(squeezed_out3, transform)
+    # net_transformed = tf.expand_dims(net_transformed, [2])
 
-    out4 = tf_util.conv2d(net_transformed, 512, [1,1], padding='VALID', stride=[1,1],
+    out4 = tf_util.conv2d(squeezed_out3, 512, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv4', bn_decay=bn_decay)
     out5 = tf_util.conv2d(out4, 2048, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv5', bn_decay=bn_decay)
@@ -150,12 +150,13 @@ def get_loss(l_pred, seg_pred, label, seg, weight, end_points):
     per_instance_seg_pred_res = tf.argmax(seg_pred, 2)
 
     # Enforce the transformation as orthogonal matrix
-    transform = end_points['transform'] # BxKxK
-    K = transform.get_shape()[1].value
-    mat_diff = tf.matmul(transform, tf.transpose(transform, perm=[0,2,1])) - tf.constant(np.eye(K), dtype=tf.float32)
-    mat_diff_loss = tf.nn.l2_loss(mat_diff)
+    # transform = end_points['transform'] # BxKxK
+    # K = transform.get_shape()[1].value
+    # mat_diff = tf.matmul(transform, tf.transpose(transform, perm=[0,2,1])) - tf.constant(np.eye(K), dtype=tf.float32)
+    # mat_diff_loss = tf.nn.l2_loss(mat_diff)
 
 
-    total_loss = weight * seg_loss + (1 - weight) * label_loss + mat_diff_loss * 1e-3
+    total_loss = weight * seg_loss + (1 - weight) * label_loss
+    # total_loss = weight * seg_loss + (1 - weight) * label_loss + mat_diff_loss * 1e-3
 
     return total_loss, label_loss, per_instance_label_loss, seg_loss, per_instance_seg_loss, per_instance_seg_pred_res
