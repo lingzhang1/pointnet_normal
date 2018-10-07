@@ -4,18 +4,18 @@
 % mainpath = strcat(fullpath, '/data/Stanford3dDataset_v1.2_Aligned_Version')
 mainpath = '../data/Stanford3dDataset_v1.2_Aligned_Version'
 files = dir(mainpath);
-dirFlags = [files.isdir];
+dirFlags = [files.isdir]
 all_area = files(dirFlags);
 all_area(1).name
 length(all_area)
-for a=1:length(all_area)
-    area = all_area(area).name;
+for a=3:length(all_area)
+    area = all_area(a).name;
     category_path = strcat( mainpath, '/', area);
     all_category = dir(category_path);
     
-    for cat=1:length(all_category)
+    for cat=3:length(all_category)
         
-        category = all_category(cat).name;
+        category = all_category(cat).name
         data_name = strcat(category, '.txt');
         data_path = strcat( mainpath, '/', area, '/',category, data_name);
 
