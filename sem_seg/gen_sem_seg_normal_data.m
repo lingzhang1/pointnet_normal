@@ -21,6 +21,8 @@ for a=3:length(all_area)
         category = all_category(cat).name;
         data_name = strcat(category, '.txt');
         data_path = strcat( mainpath, '/', area, '/',category,'/', data_name);
+        
+        professing = strcat(area, '/',category,'/', data_name)
 
         Points = load(data_path);
         xyzPoints = Points(:,1:3);
@@ -28,7 +30,7 @@ for a=3:length(all_area)
 
 %       reduction based on label
 %         label_path = strcat( mainpath, '/', category, '/points_label/', label_files(n).name);
-%         lables = load(label_path);
+%         lables = load(label_path)C;
 %         A = (lables ~= 2);
 
 %       cut part of the object bansed on axis
@@ -45,34 +47,33 @@ for a=3:length(all_area)
         normals = pcnormals(ptCloud);
 
     %       show normals
-        figure;
-        pcshow(ptCloud);
-        title('Estimated Normals of Point Cloud');
-        hold on;
-
-        x = ptCloud.Location(1:1:end,1);
-        y = ptCloud.Location(1:1:end,2);
-        z = ptCloud.Location(1:1:end,3);
-        u = normals(1:1:end,1);
-        v = normals(1:1:end,2);
-        w = normals(1:1:end,3);
-
-        quiver3(x,y,z,u,v,w);
-        hold off
+%         figure;
+%         pcshow(ptCloud);
+%         title('Estimated Normals of Point Cloud');
+%         hold on;
+% 
+%         x = ptCloud.Location(1:1:end,1);
+%         y = ptCloud.Location(1:1:end,2);
+%         z = ptCloud.Location(1:1:end,3);
+%         u = normals(1:1:end,1);
+%         v = normals(1:1:end,2);
+%         w = normals(1:1:end,3);
+% 
+%         quiver3(x,y,z,u,v,w);
+%         hold off
 
     %       out put normals and coords
         coords_normal = zeros(row, 12);
-        coords_normal(1,6) = Points(1,6);
-        coords_normal(10,12) = normals;
+        coords_normal(:,1:6) = Points(:,1:6);
+        coords_normal(:,10:12) = normals;
+        coords_normal(1:2,:)
         
-        output_path = input_path;
+        output_path = data_path;
         fileID = fopen(output_path, 'w');
-
-%         for ii = 1:size(coords_normal,1)
-        fprintf(fileID,'%10.8f %10.8f %10.8f %d %d %d %10.8f %10.8f %10.8f %10.8f %10.8f %10.8f\n',coords_normal);
-%         end
+        for ii=1:row
+            fprintf(fileID,'%10.8f %10.8f %10.8f %d %d %d %10.8f %10.8f %10.8f %10.8f %10.8f %10.8f\n',coords_normal(ii,:));
+        end
         fclose(fileID);
-
     end
 end
 
