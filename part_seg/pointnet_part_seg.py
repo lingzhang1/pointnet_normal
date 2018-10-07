@@ -134,6 +134,7 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
     net2 = tf_util.conv2d(net2, part_num, [1,1], padding='VALID', stride=[1,1], activation_fn=None,
                         bn=False, scope='seg/conv4', weight_decay=weight_decay)
 
+
     net2 = tf.reshape(net2, [batch_size, num_point, part_num])
 
     return net, net2, end_points
