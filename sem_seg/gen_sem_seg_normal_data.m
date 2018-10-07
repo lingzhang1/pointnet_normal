@@ -2,10 +2,15 @@
 % s = what();
 % fullpath = fileparts(s.path);
 % mainpath = strcat(fullpath, '/data/Stanford3dDataset_v1.2_Aligned_Version')
-mainpath = '../data/Stanford3dDataset_v1.2_Aligned_Version'
+mainpath = '../data/Stanford3dDataset_v1.2_Aligned_Version';
 all_area = dir(mainpath);
 all_area(1).name
-for a=1:length(all_area)
+all_area(2).name
+all_area(3).name
+all_area(4).name
+all_area(5).name
+length(all_area) - 2
+for a=1:(length(all_area) - 2)
     area = all_area(area).name;
     category_path = strcat( mainpath, '/', area);
     all_category = dir(category_path);
