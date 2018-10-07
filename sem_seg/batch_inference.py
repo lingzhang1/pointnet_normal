@@ -38,7 +38,7 @@ def log_string(out_str):
 
 def evaluate():
     is_training = False
-     
+
     with tf.device('/gpu:'+str(GPU_INDEX)):
         pointclouds_pl, labels_pl = placeholder_inputs(BATCH_SIZE, NUM_POINT)
         is_training_pl = tf.placeholder(tf.bool, shape=())
@@ -47,10 +47,10 @@ def evaluate():
         pred = get_model(pointclouds_pl, is_training_pl)
         loss = get_loss(pred, labels_pl)
         pred_softmax = tf.nn.softmax(pred)
- 
+
         # Add ops to save and restore all the variables.
         saver = tf.train.Saver()
-        
+
     # Create a session
     config = tf.ConfigProto()
     config.gpu_options.allow_growth = True
@@ -68,7 +68,7 @@ def evaluate():
            'pred': pred,
            'pred_softmax': pred_softmax,
            'loss': loss}
-    
+
     total_correct = 0
     total_seen = 0
     fout_out_filelist = open(FLAGS.output_filelist, 'w')
@@ -98,27 +98,27 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
         fout_gt = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_gt.obj'), 'w')
     fout_data_label = open(out_data_label_filename, 'w')
     fout_gt_label = open(out_gt_label_filename, 'w')
-    
+
     current_data, current_label = indoor3d_util.room2blocks_wrapper_normalized(room_path, NUM_POINT)
     current_data = current_data[:,0:NUM_POINT,:]
     current_label = np.squeeze(current_label)
     # Get room dimension..
     data_label = np.load(room_path)
-    data = data_label[:,0:6]
+    data = data_label[:,0:12]
     max_room_x = max(data[:,0])
     max_room_y = max(data[:,1])
     max_room_z = max(data[:,2])
-    
+
     file_size = current_data.shape[0]
     num_batches = file_size // BATCH_SIZE
     print(file_size)
 
-    
+
     for batch_idx in range(num_batches):
         start_idx = batch_idx * BATCH_SIZE
         end_idx = (batch_idx+1) * BATCH_SIZE
         cur_batch_size = end_idx - start_idx
-        
+
         feed_dict = {ops['pointclouds_pl']: current_data[start_idx:end_idx, :, :],
                      ops['labels_pl']: current_label[start_idx:end_idx],
                      ops['is_training_pl']: is_training}
