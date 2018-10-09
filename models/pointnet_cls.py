@@ -17,19 +17,15 @@ def placeholder_inputs(batch_size, num_point):
 
 def get_model(point_cloud, is_training, bn_decay=None):
     """ Classification PointNet, input is BxNx3, output Bx40 """
-    print("point_cloud[0] ===== ", point_cloud[0])
     batch_size = point_cloud.get_shape()[0].value
     num_point = point_cloud.get_shape()[1].value
     end_points = {}
 
     with tf.variable_scope('transform_net1') as sc:
         transform = input_transform_net(point_cloud, is_training, bn_decay, K=6)
-
     point_cloud_transformed = tf.matmul(point_cloud, transform)
-
     input_image = tf.expand_dims(point_cloud_transformed, -1)
-
-    net = tf_util.conv2d(input_image, 64, [1,1],
+    net = tf_util.conv2d(input_image, 64, [1,6],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv1', bn_decay=bn_decay)
@@ -38,12 +34,11 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv2', bn_decay=bn_decay)
-
+    print("net = ", net.shape)
     with tf.variable_scope('transform_net2') as sc:
         transform = feature_transform_net(net, is_training, bn_decay, K=64)
     end_points['transform'] = transform
-
-    net_transformed = tf.matmul(net, transform)
+    net_transformed = tf.matmul(tf.squeeze(net, axis=[2]), transform)
     net_transformed = tf.expand_dims(net_transformed, [2])
 
     net = tf_util.conv2d(net_transformed, 64, [1,1],

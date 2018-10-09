@@ -48,7 +48,7 @@ def get_transform(point_cloud, is_training, bn_decay=None, K = 3):
     num_point = point_cloud.get_shape()[1].value
 
     input_image = tf.expand_dims(point_cloud, -1)
-    net = tf_util.conv2d(input_image, 64, [1,K], padding='VALID', stride=[1,1],
+    net = tf_util.conv2d(input_image, 64, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='tconv1', bn_decay=bn_decay)
     net = tf_util.conv2d(net, 128, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='tconv3', bn_decay=bn_decay)
