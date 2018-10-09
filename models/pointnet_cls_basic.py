@@ -22,7 +22,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     input_image = tf.expand_dims(point_cloud, -1)
 
     # Point functions (MLP implemented as conv2d)
-    net = tf_util.conv2d(input_image, 64, [1,6],
+    net = tf_util.conv2d(input_image, 64, [1,1],
                          padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training,
                          scope='conv1', bn_decay=bn_decay)
