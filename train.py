@@ -182,8 +182,6 @@ def train_one_epoch(sess, ops, train_writer):
         current_data = current_data[:,0:NUM_POINT,:]
         current_data, current_label, _ = provider.shuffle_data(current_data, np.squeeze(current_label))
         current_label = np.squeeze(current_label)
-        print("current_data == ", current_data[0,2,:])
-        print("current_label == ", current_label.shape)
         file_size = current_data.shape[0]
         num_batches = file_size // BATCH_SIZE
 
