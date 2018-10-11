@@ -8,21 +8,22 @@ dirFlags = [files.isdir];
 all_area = files(dirFlags);
 
 for a=3:length(all_area)
-    
+
     area = all_area(a).name;
     category_path = strcat( mainpath, '/', area);
-    
+
     files = dir(category_path);
     dirFlags = [files.isdir];
     all_category = files(dirFlags);
-    
+
     for cat=3:length(all_category)
-        
+
         category = all_category(cat).name;
         data_name = strcat(category, '.txt');
-        data_path = strcat( mainpath, '/', area, '/',category,'/', data_name);
-        
-        professing = strcat(area, '/',category,'/', data_name)
+
+        data_path = strcat( mainpath, '/', area, '/',category,'/', 'Annotations/', '*.txt');
+
+        professing = strcat(area, '/',category,'/', 'Annotations/', '*/.txt')
 
         Points = load(data_path);
         xyzPoints = Points(:,1:3);
@@ -39,7 +40,7 @@ for a=3:length(all_area)
 %         Range_value = Max_v - Min_v;
 %         [value, axis] = max(Range_value);
 %         A = xyzPoints(:,axis) > (Min_v(axis) + value * 0.3);
-% 
+%
 %         xyzPoints = xyzPoints(A ~= 0,:);
 
     %       get normals
@@ -51,14 +52,14 @@ for a=3:length(all_area)
 %         pcshow(ptCloud);
 %         title('Estimated Normals of Point Cloud');
 %         hold on;
-% 
+%
 %         x = ptCloud.Location(1:1:end,1);
 %         y = ptCloud.Location(1:1:end,2);
 %         z = ptCloud.Location(1:1:end,3);
 %         u = normals(1:1:end,1);
 %         v = normals(1:1:end,2);
 %         w = normals(1:1:end,3);
-% 
+%
 %         quiver3(x,y,z,u,v,w);
 %         hold off
 
@@ -67,7 +68,7 @@ for a=3:length(all_area)
         coords_normal(:,1:6) = Points(:,1:6);
         coords_normal(:,10:12) = normals;
         coords_normal(1:2,:)
-        
+
         output_path = data_path;
         fileID = fopen(output_path, 'w');
         for ii=1:row
@@ -76,4 +77,3 @@ for a=3:length(all_area)
         fclose(fileID);
     end
 end
-
