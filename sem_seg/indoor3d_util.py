@@ -231,7 +231,9 @@ def room2blocks_plus_normalized(data_label, num_point, block_size, stride,
     """ room2block, with input filename and RGB preprocessing.
         for each block centralize XYZ, add normalized XYZ as 678 channels
     """
+    print("data_label == ", data_label.shape)
     data = data_label[:,0:12]
+    print("data == ", data.shape)
     data[:,3:6] /= 255.0
     label = data_label[:,-1].astype(np.uint8)
     max_room_x = max(data[:,0])
@@ -240,7 +242,9 @@ def room2blocks_plus_normalized(data_label, num_point, block_size, stride,
 
     data_batch, label_batch = room2blocks(data, label, num_point, block_size, stride,
                                           random_sample, sample_num, sample_aug)
+    print("data_batch == ", data_batch.shape)
     new_data_batch = np.zeros((data_batch.shape[0], num_point, 12))
+    print("new_data_batch == ", new_data_batch.shape)
     for b in range(data_batch.shape[0]):
         new_data_batch[b, :, 6] = data_batch[b, :, 0]/max_room_x
         new_data_batch[b, :, 7] = data_batch[b, :, 1]/max_room_y
