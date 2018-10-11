@@ -37,7 +37,7 @@ def get_category_names():
     shape_names = [line.rstrip() for line in open(shape_names_file)]
     return shape_names
 
-# Return all the filepaths for the shapes in MODELNET40 
+# Return all the filepaths for the shapes in MODELNET40
 def get_obj_filenames():
     obj_filelist_file = os.path.join(MODELNET40_PATH, 'filelist.txt')
     obj_filenames = [os.path.join(MODELNET40_PATH, line.rstrip()) for line in open(obj_filelist_file)]
@@ -57,8 +57,8 @@ def batch_mkdir(output_folder, subdir_list):
 # ----------------------------------------------------------------
 
 # Write numpy array data and label to h5_filename
-def save_h5_data_label_normal(h5_filename, data, label, normal, 
-		data_dtype='float32', label_dtype='uint8', noral_dtype='float32'):
+def save_h5_data_label_normal(h5_filename, data, label, normal,
+		data_dtype='float32', label_dtype='uint8', normal_dtype='float32'):
     h5_fout = h5py.File(h5_filename)
     h5_fout.create_dataset(
             'data', data=data,
@@ -141,5 +141,3 @@ def pad_arr_rows(arr, row, pad='edge'):
         return np.lib.pad(arr, ((0, row-arr.shape[0]), (0, 0)), 'edge')
     if pad == 'constant':
         return np.lib.pad(arr, ((0, row-arr.shape[0]), (0, 0)), 'constant', (0, 0))
-
-

@@ -154,7 +154,7 @@ def room2blocks(data, label, num_point, block_size=1.0, stride=1.0,
     """
     assert(stride<=block_size)
 
-    limit = np.amax(data, 0)[0:3]
+    limit = np.amax(data, 0)[0:12]
 
     # Get the corner location for our sampling blocks
     xbeg_list = []
