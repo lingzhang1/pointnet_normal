@@ -1,6 +1,8 @@
 import numpy as np
 
-pred_data_label_filenames = [line.rstrip() for line in open('all_pred_data_label_filelist.txt')]
+path = 'log6/output_filelist.txt'
+# 'all_pred_data_label_filelist.txt'
+pred_data_label_filenames = [line.rstrip() for line in open(path)]
 gt_label_filenames = [f.rstrip('_pred\.txt') + '_gt.txt' for f in pred_data_label_filenames]
 num_room = len(gt_label_filenames)
 
