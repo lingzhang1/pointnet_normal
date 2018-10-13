@@ -17,12 +17,13 @@ for n=1:length(data_files)
     label = h5read(data_path,'/label');
     pid = h5read(data_path,'/pid');
     
-    h5disp(data_path);
+%     h5disp(data_path);
     
-    x = length(data(:, 1, 1)) * 2;
+    x = length(data(:, 1, 1)) + 3;
     y = length(data(1, :, 1));
     z = length(data(1, 1, :));
     result = zeros(x,y,z);
+    nan_num = 0;
     for i = 1:z
         xyzPoints = data(:,:,i);
         xyzPoints = xyzPoints(1:3,:);
@@ -46,7 +47,16 @@ for n=1:length(data_files)
 
 %%%%%%%%%%%%%%%%  get normals  %%%%%%%%%%%%%%%    
         ptCloud = pointCloud(xyzPoints);
-        normals = pcnormals(ptCloud);
+        normals = pcnormals(ptCloud, 20);
+        
+%                 
+%         [row, col] = find(isnan(normals));
+%         if length(row) ~= 0
+%             xyzPoints(row,:) = xyzPoints(row-1,:);
+%             normals(row,:) = normals(row-1,:);
+%         end
+        [row, col] = find(isnan(normals));
+        nan_num = nan_num + length(row);
 
 %%%%%%%%%%%%%%%%  show normals  %%%%%%%%%%%%%%%
 %         figure;
@@ -70,6 +80,9 @@ for n=1:length(data_files)
         result(:,:,i) = coords_normal;
     end
     
+    processing = data_files(n).name
+    nan_num
+    
     out_path = strcat( mainpath, '/coords_normal/', data_files(n).name);
     
     info = h5info(data_path);
@@ -92,6 +105,6 @@ for n=1:length(data_files)
     h5create(out_path,'/pid',[Dataspace_pid],'Datatype','uint8','ChunkSize', [ChunkSize_pid],'Deflate', 1);
     h5write(out_path,'/pid',pid);
     
-    h5disp(out_path);
+%     h5disp(out_path);
 end
 

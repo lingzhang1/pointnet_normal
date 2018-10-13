@@ -54,7 +54,7 @@ for n=1:length(data_files)
             xyzPoints(row,:) = xyzPoints(row-1,:);
             normals(row,:) = normals(row-1,:);
         end
-        [row, col] = find(isnan(normals));
+%         [row, col] = find(isnan(normals));
         nan_num = nan_num + length(row);
 
 %%%%%%%%%%%%%%%%  show normals  %%%%%%%%%%%%%%%
