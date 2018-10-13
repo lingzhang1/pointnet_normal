@@ -149,7 +149,7 @@ def eval_one_epoch(sess, ops, num_votes=1, topk=1):
                     img_filename = '%d_label_%s_pred_%s.jpg' % (error_cnt, SHAPE_NAMES[l],
                                                            SHAPE_NAMES[pred_val[i-start_idx]])
                     img_filename = os.path.join(DUMP_DIR, img_filename)
-                    output_img = pc_util.point_cloud_three_views(np.squeeze(current_data[i, :, :]))
+                    output_img = pc_util.point_cloud_three_views(np.squeeze(current_data[i, :, 0:3]))
                     scipy.misc.imsave(img_filename, output_img)
                     error_cnt += 1
 
