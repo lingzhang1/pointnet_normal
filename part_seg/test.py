@@ -189,6 +189,9 @@ def predict():
             seg_file_to_load = os.path.join(ply_data_dir, seg_files[shape_idx])
 
             pts, seg = load_pts_seg_files(pts_file_to_load, seg_file_to_load, objcats[cur_gt_label])
+            nan_vec = np.argwhere(np.isnan(pts))
+            print("nan_vec =", nan_vec.shape)
+            
             ori_point_num = len(seg)
 
             batch_data[0, ...] = pc_augment_to_point_num(pc_normalize(pts), point_num)
