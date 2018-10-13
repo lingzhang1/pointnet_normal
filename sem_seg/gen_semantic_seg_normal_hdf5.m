@@ -12,7 +12,7 @@ mkdir indoor3d_sem_seg_hdf5_data coords_normal;
 for n=1:length(data_files)
     data_path = strcat( mainpath, '/', data_files(n).name);
     
-    h5disp(data_path);
+%     h5disp(data_path);
     data = h5read(data_path,'/data');
     label = h5read(data_path,'/label');
     
@@ -20,6 +20,7 @@ for n=1:length(data_files)
     y = length(data(1, :, 1));
     z = length(data(1, 1, :));
     result = zeros(x,y,z);
+    nan_num = 0;
     for i = 1:z
         xyzPoints = data(1:3,:,i);
         xyzPoints = xyzPoints';
@@ -45,6 +46,13 @@ for n=1:length(data_files)
 %%%%%%%%%%%%%%%%  get normals  %%%%%%%%%%%%%%%    
         ptCloud = pointCloud(xyzPoints);
         normals = pcnormals(ptCloud);
+        [row, col] = find(isnan(normals));
+        if length(row) ~= 0
+            xyzPoints(row,:) = xyzPoints(row-1,:);
+            normals(row,:) = normals(row-1,:);
+        end
+%         [row, col] = find(isnan(normals));
+        nan_num = nan_num + length(row);
 
 %%%%%%%%%%%%%%%%  show normals  %%%%%%%%%%%%%%%
 %         figure;
@@ -68,6 +76,9 @@ for n=1:length(data_files)
         result(:,:,i) = coords_normal;
     end
     
+    processing = data_files(n).name
+    nan_num 
+    
     out_path = strcat( mainpath, '/coords_normal/', data_files(n).name);
     
     info = h5info(data_path);
@@ -82,6 +93,6 @@ for n=1:length(data_files)
     h5create(out_path,'/label',[Dataspace_label],'Datatype','uint8','ChunkSize', [ChunkSize_label],'Deflate', 1);
     h5write(out_path,'/label',label);
       
-    h5disp(out_path);
+%     h5disp(out_path);
 end
 
