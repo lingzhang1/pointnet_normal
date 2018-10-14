@@ -29,26 +29,28 @@ for cat in categories:
     data_files = [f for f in listdir(data_path) if isfile(join(data_path, f))]
     print("data files size = ",len(data_files))
     for filename in data_files:
-        data_path = cat + "/points/" + filename
+        labelname = filename[0:-3] + "seg"
+        data_path = cat + "/points/" + filename + " " + cat + "/expert_verified/points_label/" + labelname + " " + cat
         data_res.append(data_path)
     print("data_res[0] = ", data_res[0])
     # read all label under each categories
-    labe_path = mainpath + "/" + cat + "/expert_verified/points_label"
-    label_res = []
-    label_files = [f for f in listdir(labe_path) if isfile(join(labe_path, f))]
-    print("label files size = ",len(label_files))
-    print(label_files[0])
-    for filename in label_files:
-        labe_path = cat + "/expert_verified/points_label" + filename + " " + cat
-        label_res.append(labe_path)
-    print("label[0] = ",label_res[0])
+
+    # labe_path = mainpath + "/" + cat + "/expert_verified/points_label"
+    # label_res = []
+    # label_files = [f for f in listdir(labe_path) if isfile(join(labe_path, f))]
+    # print("label files size = ",len(label_files))
+    # print(label_files[0])
+    # for filename in label_files:
+    #     labe_path = cat + "/expert_verified/points_label/" + filename + " " + cat
+    #     label_res.append(labe_path)
+    # print("label[0] = ",label_res[0])
 
     # concatenate
-    results = concatenate((array(data_res),array(label_res)),axis = 1)
-    print("results all= ", results.shape)
+    # results = concatenate((array(data_res),array(label_res)),axis = 1)
+
 
     out_lines = []
-    for l in results:
+    for l in data_res:
         if l in testing :
             continue
         else:
