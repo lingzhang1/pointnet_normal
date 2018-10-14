@@ -57,12 +57,9 @@ def get_model(point_cloud, is_training, bn_decay=None):
     # Symmetric function: max pooling
     max_net = tf_util.max_pool2d(net, [num_point,1],
                              padding='VALID', scope='maxpool')
-    print("max_net = ", max_net.shape)
     avg_net = tf_util.avg_pool2d(net, [num_point,1],
-                             padding='VALID', scope='maxpool')
-    print("avg_net = ", avg_net.shape)
+                             padding='VALID', scope='avgpool')
     max_avg_net = tf.concat([max_net, avg_net], 3)
-    print("max_avg_net = ", max_avg_net.shape)
 
     net = tf.reshape(max_avg_net, [batch_size, -1])
     net = tf_util.fully_connected(net, 512, bn=True, is_training=is_training,

@@ -44,11 +44,15 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          scope='conv5', bn_decay=bn_decay)
 
     # Symmetric function: max pooling
-    net = tf_util.max_pool2d(net, [num_point,1],
+
+    max_net = tf_util.max_pool2d(net, [num_point,1],
                              padding='VALID', scope='maxpool')
+    avg_net = tf_util.avg_pool2d(net, [num_point,1],
+                             padding='VALID', scope='avgpool')
+    max_avg_net = tf.concat([max_net, avg_net], 3)
 
     # MLP on global point cloud vector
-    net = tf.reshape(net, [batch_size, -1])
+    net = tf.reshape(max_avg_net, [batch_size, -1])
     net = tf_util.fully_connected(net, 512, bn=True, is_training=is_training,
                                   scope='fc1', bn_decay=bn_decay)
     net = tf_util.fully_connected(net, 256, bn=True, is_training=is_training,
