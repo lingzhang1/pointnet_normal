@@ -21,6 +21,7 @@ lines = open("testing_ply_file_list.txt", "r").readlines()
 for l in lines:
     testing.append(l[0:len(l) - 1])
 print("testing[0] = ", testing[0])
+print("testing files size = ", len(testing))
 
 for cat in categories:
     # read all data under each categories
@@ -44,7 +45,7 @@ for cat in categories:
         dataname = filename[0:-3] + "pts"
         data_path = cat + "/points/" + dataname + " " + cat + "/expert_verified/points_label/" + filename + " " + cat
         label_res.append(data_path)
-    print("label[0] = ",label_res[0])
+    print("label_res[0] = ",label_res[0])
 
     # concatenate
     # results = concatenate((array(data_res),array(label_res)),axis = 1)
