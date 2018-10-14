@@ -23,6 +23,7 @@ for l in lines:
 print("testing[0] = ", testing[0])
 print("testing files size = ", len(testing))
 
+label_res = []
 for cat in categories:
     # read all data under each categories
     # data_path = mainpath + "/" + cat + "/points"
@@ -37,7 +38,6 @@ for cat in categories:
     # read all label under each categories
 
     labe_path = mainpath + "/" + cat + "/expert_verified/points_label"
-    label_res = []
     label_files = [f for f in listdir(labe_path) if isfile(join(labe_path, f))]
     print("label files size = ",len(label_files))
     print("label_files[0] = ", label_files[0])
@@ -45,20 +45,17 @@ for cat in categories:
         dataname = filename[0:-3] + "pts"
         data_path = cat + "/points/" + dataname + " " + cat + "/expert_verified/points_label/" + filename + " " + cat
         label_res.append(data_path)
-    print("label_res[0] = ",label_res[0])
 
-    # concatenate
-    # results = concatenate((array(data_res),array(label_res)),axis = 1)
+print("label_res[0] = ",label_res[0])
 
-
-    out_lines = []
-    for l in label_res:
-        if l in testing :
-            continue
-        else:
-            out_lines.append(l)
-    print("out_lines len = ", len(out_lines))
-    ofname = "training_ply_file_list.txt"
-    with open(ofname, mode='w') as fo:
-            for l in out_lines:
-                fo.write(str(l)+'\n')
+out_lines = []
+for l in label_res:
+    if l in testing :
+        continue
+    else:
+        out_lines.append(l)
+print("out_lines len = ", len(out_lines))
+ofname = "training_ply_file_list.txt"
+with open(ofname, mode='w') as fo:
+        for l in out_lines:
+            fo.write(str(l)+'\n')
