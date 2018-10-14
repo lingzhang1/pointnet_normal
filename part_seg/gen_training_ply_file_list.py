@@ -42,7 +42,7 @@ for cat in categories:
     print("label_files[0] = ", label_files[0])
     for filename in label_files:
         dataname = filename[0:-3] + "pts"
-        data_path = cat + "/points/" + dataname + " " + cat + "/expert_verified/points_label/" + labelname + " " + cat
+        data_path = cat + "/points/" + dataname + " " + cat + "/expert_verified/points_label/" + filename + " " + cat
         label_res.append(labe_path)
     print("label[0] = ",label_res[0])
 
