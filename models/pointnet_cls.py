@@ -61,7 +61,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
     avg_net = tf_util.avg_pool2d(net, [num_point,1],
                              padding='VALID', scope='maxpool')
     print("avg_net = ", avg_net.shape)
-    max_avg_net = tf.concat([max_net, avg_net], 0)
+    max_avg_net = tf.concat([max_net, avg_net], 3)
     print("max_avg_net = ", max_avg_net.shape)
 
     net = tf.reshape(max_avg_net, [batch_size, -1])
