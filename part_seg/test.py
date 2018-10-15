@@ -198,7 +198,7 @@ def predict():
             cmap = np.array([cmap(i) for i in range(16)])[:,:3]
             gt = cmap[seg - 1, :]
             pred_color = cmap[seg[0], :]
-            showpoints(point, gt, pred_color)
+            showpoints(pts, gt, pred_color)
 
             ori_point_num = len(seg)
 
