@@ -10,6 +10,9 @@ sys.path.append(os.path.dirname(BASE_DIR))
 import provider
 import pointnet_part_seg as model
 
+from show3d_balls import *
+import matplotlib.pyplot as plt
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_path', default='train_results/trained_models/epoch_190.ckpt', help='Model checkpoint path')
 FLAGS = parser.parse_args()
@@ -189,9 +192,14 @@ def predict():
             seg_file_to_load = os.path.join(ply_data_dir, seg_files[shape_idx])
 
             pts, seg = load_pts_seg_files(pts_file_to_load, seg_file_to_load, objcats[cur_gt_label])
-            nan_vec = np.argwhere(np.isnan(pts))
-            if (nan_vec.shape[0] != 0):
-                print("nan_vec =", nan_vec)
+
+            ########### show ############
+            cmap = plt.cm.get_cmap("hsv", 10)
+            cmap = np.array([cmap(i) for i in range(10)])[:,:3]
+            gt = cmap[seg.numpy() - 1, :]
+            point_np = point.numpy()
+            pred_color = cmap[seg.numpy()[0], :]
+            showpoints(point_np, gt, pred_color)
 
             ori_point_num = len(seg)
 
