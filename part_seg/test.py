@@ -194,8 +194,8 @@ def predict():
             pts, seg = load_pts_seg_files(pts_file_to_load, seg_file_to_load, objcats[cur_gt_label])
 
             ########### show ############
-            cmap = plt.cm.get_cmap("hsv", 10)
-            cmap = np.array([cmap(i) for i in range(10)])[:,:3]
+            cmap = plt.cm.get_cmap("hsv", 12)
+            cmap = np.array([cmap(i) for i in range(12)])[:,:3]
             gt = cmap[seg - 1, :]
             pred_color = cmap[seg[0], :]
             showpoints(point, gt, pred_color)
