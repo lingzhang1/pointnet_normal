@@ -33,8 +33,12 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          bn=True, is_training=is_training, scope='conv4', bn_decay=bn_decay)
     points_feat1 = tf_util.conv2d(net, 1024, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv5', bn_decay=bn_decay)
-    # MAX
-    pc_feat1 = tf_util.max_pool2d(points_feat1, [num_point,1], padding='VALID', scope='maxpool1')
+    # MAX and AVG
+    pc_feat1_max = tf_util.max_pool2d(points_feat1, [num_point,1], padding='VALID', scope='maxpool1')
+    pc_feat1_avg = tf_util.max_pool2d(points_feat1, [num_point,1], padding='VALID', scope='avgpool1')
+
+    pc_feat1 = tf.concat([pc_feat1_max, pc_feat1_avg], 3)
+
     # FC
     pc_feat1 = tf.reshape(pc_feat1, [batch_size, -1])
     pc_feat1 = tf_util.fully_connected(pc_feat1, 256, bn=True, is_training=is_training, scope='fc1', bn_decay=bn_decay)
