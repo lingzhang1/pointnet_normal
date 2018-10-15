@@ -196,10 +196,9 @@ def predict():
             ########### show ############
             cmap = plt.cm.get_cmap("hsv", 10)
             cmap = np.array([cmap(i) for i in range(10)])[:,:3]
-            gt = cmap[seg.numpy() - 1, :]
-            point_np = point.numpy()
-            pred_color = cmap[seg.numpy()[0], :]
-            showpoints(point_np, gt, pred_color)
+            gt = cmap[seg - 1, :]
+            pred_color = cmap[seg[0], :]
+            showpoints(point, gt, pred_color)
 
             ori_point_num = len(seg)
 
