@@ -10,8 +10,8 @@ sys.path.append(os.path.dirname(BASE_DIR))
 import provider
 import pointnet_part_seg as model
 
-from show3d_balls import *
-import matplotlib.pyplot as plt
+# from show3d_balls import *
+# import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--model_path', default='train_results/trained_models/epoch_190.ckpt', help='Model checkpoint path')
@@ -216,11 +216,11 @@ def predict():
             seg_pred_val = np.argmax(seg_pred_res, axis=1)[:ori_point_num]
 
             ########### show pred seg obj ############
-            cmap = plt.cm.get_cmap("hsv", 16)
-            cmap = np.array([cmap(i) for i in range(16)])[:,:3]
-            gt = cmap[seg_pred_val - 1, :]
-            pred_color = cmap[seg_pred_val[0], :]
-            showpoints(pts, gt, pred_color)
+            # cmap = plt.cm.get_cmap("hsv", 16)
+            # cmap = np.array([cmap(i) for i in range(16)])[:,:3]
+            # gt = cmap[seg_pred_val - 1, :]
+            # pred_color = cmap[seg_pred_val[0], :]
+            # showpoints(pts, gt, pred_color)
 
             seg_acc = np.mean(seg_pred_val == seg)
 
