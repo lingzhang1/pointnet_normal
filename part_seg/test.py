@@ -193,13 +193,6 @@ def predict():
 
             pts, seg = load_pts_seg_files(pts_file_to_load, seg_file_to_load, objcats[cur_gt_label])
 
-            ########### show ############
-            cmap = plt.cm.get_cmap("hsv", 16)
-            cmap = np.array([cmap(i) for i in range(16)])[:,:3]
-            gt = cmap[seg - 1, :]
-            pred_color = cmap[seg[0], :]
-            showpoints(pts, gt, pred_color)
-
             ori_point_num = len(seg)
 
             batch_data[0, ...] = pc_augment_to_point_num(pc_normalize(pts), point_num)
@@ -221,6 +214,13 @@ def predict():
             seg_pred_res[:, non_cat_labels] = mini - 1000
 
             seg_pred_val = np.argmax(seg_pred_res, axis=1)[:ori_point_num]
+
+            ########### show pred seg obj ############
+            cmap = plt.cm.get_cmap("hsv", 16)
+            cmap = np.array([cmap(i) for i in range(16)])[:,:3]
+            gt = cmap[seg_pred_val - 1, :]
+            pred_color = cmap[seg_pred_val[0], :]
+            showpoints(pts, gt, pred_color)
 
             seg_acc = np.mean(seg_pred_val == seg)
 
