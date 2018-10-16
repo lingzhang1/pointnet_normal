@@ -94,8 +94,8 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
     total_seen_class = [0 for _ in range(NUM_CLASSES)]
     total_correct_class = [0 for _ in range(NUM_CLASSES)]
     if FLAGS.visu:
-        fout = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_pred.obj'), 'w')
-        fout_gt = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_gt.obj'), 'w')
+        fout = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_pred.pts'), 'w')
+        fout_gt = open(os.path.join(DUMP_DIR, os.path.basename(room_path)[:-4]+'_gt.pts'), 'w')
     fout_data_label = open(out_data_label_filename, 'w')
     fout_gt_label = open(out_gt_label_filename, 'w')
 
@@ -142,8 +142,8 @@ def eval_one_epoch(sess, ops, room_path, out_data_label_filename, out_gt_label_f
                 color = indoor3d_util.g_label2color[pred[i]]
                 color_gt = indoor3d_util.g_label2color[current_label[start_idx+b, i]]
                 if FLAGS.visu:
-                    fout.write('v %f %f %f %d %d %d\n' % (pts[i,6], pts[i,7], pts[i,8], color[0], color[1], color[2]))
-                    fout_gt.write('v %f %f %f %d %d %d\n' % (pts[i,6], pts[i,7], pts[i,8], color_gt[0], color_gt[1], color_gt[2]))
+                    fout.write('%f %f %f %d %d %d\n' % (pts[i,6], pts[i,7], pts[i,8], color[0], color[1], color[2]))
+                    fout_gt.write('%f %f %f %d %d %d\n' % (pts[i,6], pts[i,7], pts[i,8], color_gt[0], color_gt[1], color_gt[2]))
                 fout_data_label.write('%f %f %f %d %d %d %f %d\n' % (pts[i,6], pts[i,7], pts[i,8], pts[i,3], pts[i,4], pts[i,5], pred_val[b,i,pred[i]], pred[i]))
                 fout_gt_label.write('%d\n' % (l[i]))
         correct = np.sum(pred_label == current_label[start_idx:end_idx,:])

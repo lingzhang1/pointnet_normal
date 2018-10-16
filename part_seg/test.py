@@ -66,7 +66,7 @@ def output_color_point_cloud(data, seg, out_file):
         l = len(seg)
         for i in range(l):
             color = color_map[seg[i]]
-            f.write('v %f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
+            f.write('%f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
 
 def output_color_point_cloud_red_blue(data, seg, out_file):
     with open(out_file, 'w') as f:
@@ -79,7 +79,7 @@ def output_color_point_cloud_red_blue(data, seg, out_file):
             else:
                 color = [0, 0, 0]
 
-            f.write('v %f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
+            f.write('%f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
 
 
 def pc_normalize(pc):
@@ -100,7 +100,7 @@ def output_color_point_cloud(data, seg, out_file):
         l = len(seg)
         for i in range(l):
             color = color_map[seg[i]]
-            f.write('v %f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
+            f.write('%f %f %f %f %f %f\n' % (data[i][0], data[i][1], data[i][2], color[0], color[1], color[2]))
 
 def load_pts_seg_files(pts_file, seg_file, catid):
     with open(pts_file, 'r') as f:
@@ -252,14 +252,10 @@ def predict():
             total_per_cat_iou[cur_gt_label] += avg_iou
 
             if output_verbose:
-                output_color_point_cloud(pts, seg, os.path.join(output_dir, str(shape_idx)+'_gt.obj'))
-                output_color_point_cloud(pts, seg, os.path.join(output_dir, str(shape_idx)+'_gt.txt'))
-                output_color_point_cloud(pts, seg_pred_val, os.path.join(output_dir, str(shape_idx)+'_pred.obj'))
-                output_color_point_cloud(pts, seg_pred_val, os.path.join(output_dir, str(shape_idx)+'_pred.txt'))
+                output_color_point_cloud(pts, seg, os.path.join(output_dir, str(shape_idx)+'_gt.pts'))
+                output_color_point_cloud(pts, seg_pred_val, os.path.join(output_dir, str(shape_idx)+'_pred.pts'))
                 output_color_point_cloud_red_blue(pts, np.int32(seg == seg_pred_val),
-                        os.path.join(output_dir, str(shape_idx)+'_diff.obj'))
-                output_color_point_cloud_red_blue(pts, np.int32(seg == seg_pred_val),
-                        os.path.join(output_dir, str(shape_idx)+'_diff.txt'))
+                        os.path.join(output_dir, str(shape_idx)+'_diff.pts'))
 
                 with open(os.path.join(output_dir, str(shape_idx)+'.log'), 'w') as fout:
                     fout.write('Total Point: %d\n\n' % ori_point_num)
