@@ -35,7 +35,7 @@ def get_model(point_cloud, is_training, bn_decay=None):
                          bn=True, is_training=is_training, scope='conv5', bn_decay=bn_decay)
     # MAX and AVG
     pc_feat1_max = tf_util.max_pool2d(points_feat1, [num_point,1], padding='VALID', scope='maxpool1')
-    pc_feat1_avg = tf_util.max_pool2d(points_feat1, [num_point,1], padding='VALID', scope='avgpool1')
+    pc_feat1_avg = tf_util.avg_pool2d(points_feat1, [num_point,1], padding='VALID', scope='avgpool1')
 
     pc_feat1 = tf.concat([pc_feat1_max, pc_feat1_avg], 3)
 
