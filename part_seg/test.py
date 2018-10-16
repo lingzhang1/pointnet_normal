@@ -253,9 +253,13 @@ def predict():
 
             if output_verbose:
                 output_color_point_cloud(pts, seg, os.path.join(output_dir, str(shape_idx)+'_gt.obj'))
+                output_color_point_cloud(pts, seg, os.path.join(output_dir, str(shape_idx)+'_gt.txt'))
                 output_color_point_cloud(pts, seg_pred_val, os.path.join(output_dir, str(shape_idx)+'_pred.obj'))
+                output_color_point_cloud(pts, seg_pred_val, os.path.join(output_dir, str(shape_idx)+'_pred.txt'))
                 output_color_point_cloud_red_blue(pts, np.int32(seg == seg_pred_val),
                         os.path.join(output_dir, str(shape_idx)+'_diff.obj'))
+                output_color_point_cloud_red_blue(pts, np.int32(seg == seg_pred_val),
+                        os.path.join(output_dir, str(shape_idx)+'_diff.txt'))
 
                 with open(os.path.join(output_dir, str(shape_idx)+'.log'), 'w') as fout:
                     fout.write('Total Point: %d\n\n' % ori_point_num)
