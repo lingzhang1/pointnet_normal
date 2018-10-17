@@ -107,7 +107,10 @@ def get_model(point_cloud, input_label, is_training, cat_num, part_num, \
                          bn=True, is_training=is_training, scope='conv4', bn_decay=bn_decay)
     out5 = tf_util.conv2d(out4, 2048, [1,1], padding='VALID', stride=[1,1],
                          bn=True, is_training=is_training, scope='conv5', bn_decay=bn_decay)
+
     out_max = tf_util.max_pool2d(out5, [num_point,1], padding='VALID', scope='maxpool')
+    out_avg = tf_util.avg_pool2d(out5, [num_point,1], padding='VALID', scope='avgpool')
+    out_max = tf.concat(axis=3, values=[out_max, out_avg])
 
     # classification network
     net = tf.reshape(out_max, [batch_size, -1])
